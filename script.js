@@ -210,10 +210,43 @@ function stopCamera() {
 
             videoPreview.src = reactionVideoUrl;
 
-            // Set correct extension based on type
-            const ext = mimeType.includes("mp4") ? "mp4" : "webm";
-            downloadLink.download = `hitiksha_reaction.${ext}`;
-            downloadLink.href = reactionVideoUrl;
+            // Determine file extension
+            const ext = mimeType.includes('mp4') || mimeType.includes('quicktime') ? 'mp4' : 'webm';
+            const filename = `hitiksha_reaction.${ext}`;
+
+            // Check if we can use native share (mobile behavior)
+            if (navigator.canShare && navigator.canShare({ files: [new File([blob], filename, { type: mimeType })] })) {
+                downloadLink.removeAttribute('download');
+                downloadLink.href = '#';
+                downloadLink.innerHTML = "📲 Save to Photos";
+                downloadLink.onclick = async (e) => {
+                    e.preventDefault();
+                    try {
+                        const file = new File([blob], filename, { type: mimeType });
+                        await navigator.share({
+                            files: [file],
+                            title: 'Hitiksha\'s Reaction',
+                            text: 'My beautiful surprise reaction! ❤️'
+                        });
+                    } catch (err) {
+                        console.error("Share failed:", err);
+                        // Fallback to manual download if share cancels/fails (and not just user cancel)
+                        if (err.name !== 'AbortError') {
+                            alert("Saving via Share failed. Trying direct download...");
+                            const a = document.createElement('a');
+                            a.href = reactionVideoUrl;
+                            a.download = filename;
+                            a.click();
+                        }
+                    }
+                };
+            } else {
+                // Desktop fallback
+                downloadLink.href = reactionVideoUrl;
+                downloadLink.download = filename;
+                downloadLink.innerHTML = "💾 Save This Memory";
+                downloadLink.onclick = null; // Clear any previous handlers
+            }
 
             console.log("Video saved. Ready to display.");
 
