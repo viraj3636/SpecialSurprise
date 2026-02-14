@@ -176,8 +176,10 @@ async function startCamera() {
         document.getElementById('camera-message').classList.remove('hidden');
         console.log("Recording started...");
     } catch (err) {
-        console.error("Camera error:", err);
-        alert("Camera error: " + err.name + "\n" + err.message + "\n\n(Camera requires HTTPS or localhost!)");
+        console.error("Camera failed:", err);
+        // Fallback: Don't block the user, just tell them and proceed
+        alert("Could not access camera (" + err.name + "). continuing without recording! ❤️");
+        // Ensure flow continues
     }
 }
 
