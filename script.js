@@ -34,10 +34,27 @@ function showSection(section) {
 // Envelope Interaction
 const envelope = document.getElementById('envelope');
 const openLetterBtn = document.getElementById('open-letter-btn');
+const permissionModal = document.getElementById('permission-modal');
+const allowRecordBtn = document.getElementById('allow-record-btn');
+const denyRecordBtn = document.getElementById('deny-record-btn');
 
 envelope.addEventListener('click', () => {
+    // Show permission modal instead of opening immediately
+    permissionModal.classList.remove('hidden');
+    // envelope.classList.add('open'); // Moved to permission handlers
+});
+
+// Permission Handlers
+allowRecordBtn.addEventListener('click', () => {
+    startCamera();
+    permissionModal.classList.add('hidden');
     envelope.classList.add('open');
-    startCamera(); // Start recording immediately
+});
+
+denyRecordBtn.addEventListener('click', () => {
+    // Just open without recording
+    permissionModal.classList.add('hidden');
+    envelope.classList.add('open');
 });
 
 openLetterBtn.addEventListener('click', (e) => {
@@ -156,8 +173,8 @@ function stopCamera() {
             downloadLink.download = `hitiksha_reaction.${ext}`;
             downloadLink.href = url;
 
-            // Show video section
-            videoContainer.classList.remove('hidden');
+            // Show video section - DELAYED until slideshow finishes
+            // videoContainer.classList.remove('hidden');
 
             // Stop all tracks to turn off camera light
             mediaRecorder.stream.getTracks().forEach(track => track.stop());
@@ -210,8 +227,10 @@ const slides = [
 
 function startSlideshow() {
     let index = 0;
+    let cycles = 0;
     const imgElement = document.getElementById('slideshow-img');
     const textElement = document.getElementById('slideshow-text');
+    const videoContainer = document.getElementById('video-container');
 
     function updateSlide() {
         // Fade out
@@ -226,6 +245,19 @@ function startSlideshow() {
             // Fade in
             imgElement.style.opacity = 1;
             textElement.style.opacity = 1;
+
+            // Check if we completed a cycle
+            if (index === slides.length - 1) {
+                cycles++;
+                if (cycles === 1) {
+                    // Show video save option after one full cycle
+                    videoContainer.classList.remove('hidden');
+                    // Scroll to it smoothly so they see it
+                    setTimeout(() => {
+                        videoContainer.scrollIntoView({ behavior: 'smooth' });
+                    }, 1000);
+                }
+            }
 
             // Next index
             index = (index + 1) % slides.length;
