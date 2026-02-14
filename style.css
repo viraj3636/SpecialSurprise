@@ -522,3 +522,68 @@ h1 {
         font-size: 1.5rem;
     }
 }
+
+/* Save Reaction Page */
+.save-reaction-content {
+    text-align: center;
+    max-width: 90%;
+    width: 600px;
+}
+
+.save-reaction-content h1 {
+    margin-bottom: 0.5rem;
+}
+
+.video-container {
+    margin: 1.5rem 0;
+    border-radius: 15px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.05);
+    padding: 1rem;
+}
+
+.video-container video {
+    width: 100%;
+    max-height: 400px;
+    border-radius: 10px;
+    background: #000;
+}
+
+.video-container .btn-download {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 15px 40px;
+    font-size: 1.3rem;
+    text-decoration: none;
+    border-radius: 50px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.video-container .btn-download:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(255, 77, 109, 0.4);
+}
+
+.no-video-message {
+    padding: 2rem;
+    font-size: 1.3rem;
+    color: var(--text-color);
+}
+
+.no-video-message.hidden {
+    display: none;
+}
+
+.video-container.hidden {
+    display: none;
+}
+
+#save-reaction-page {
+    overflow-y: auto;
+}
+
+#save-reaction-page .content-wrapper {
+    padding: 2rem 0;
+}

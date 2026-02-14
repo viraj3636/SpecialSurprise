@@ -2,6 +2,7 @@
 const landingPage = document.getElementById('landing-page');
 const questionPage = document.getElementById('question-page');
 const celebrationPage = document.getElementById('celebration-page');
+const saveReactionPage = document.getElementById('save-reaction-page');
 
 const startBtn = document.getElementById('start-btn');
 const yesBtn = document.getElementById('yes-btn');
@@ -227,9 +228,9 @@ const slides = [
 function startSlideshow() {
     let index = 0;
     let cycles = 0;
+    let slideshowInterval;
     const imgElement = document.getElementById('slideshow-img');
     const textElement = document.getElementById('slideshow-text');
-    const videoContainer = document.getElementById('video-container');
 
     function updateSlide() {
         // Fade out
@@ -249,12 +250,11 @@ function startSlideshow() {
             if (index === slides.length - 1) {
                 cycles++;
                 if (cycles === 1) {
-                    // Show video save option after one full cycle
-                    videoContainer.classList.remove('hidden');
-                    // Scroll to it smoothly so they see it
+                    // Stop slideshow and show save reaction page
+                    clearInterval(slideshowInterval);
                     setTimeout(() => {
-                        videoContainer.scrollIntoView({ behavior: 'smooth' });
-                    }, 1000);
+                        showSaveReactionPage();
+                    }, 3000); // Wait 3 seconds on last slide before transitioning
                 }
             }
 
@@ -268,7 +268,24 @@ function startSlideshow() {
     textElement.style.transition = "opacity 0.5s ease-in-out";
     updateSlide(); // Run immediately
 
-    setInterval(updateSlide, 4000); // Change every 4 seconds
+    slideshowInterval = setInterval(updateSlide, 4000); // Change every 4 seconds
+}
+
+function showSaveReactionPage() {
+    const videoContainer = document.getElementById('video-container');
+    const noVideoMessage = document.getElementById('no-video-message');
+
+    if (reactionVideoUrl) {
+        // Video exists, show it
+        videoContainer.classList.remove('hidden');
+        if (noVideoMessage) noVideoMessage.classList.add('hidden');
+    } else {
+        // No video, show friendly message
+        videoContainer.classList.add('hidden');
+        if (noVideoMessage) noVideoMessage.classList.remove('hidden');
+    }
+
+    showSection(saveReactionPage);
 }
 
 // (Duplicate yesBtn listener removed - already handled above at line 186)

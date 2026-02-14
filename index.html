@@ -68,13 +68,7 @@
                     <h1>Yay! I knew it! ❤️</h1>
                     <p class="message">You represent the world to me, Hitiksha.</p>
 
-                    <!-- Reaction Video Playback -->
-                    <div id="video-container" class="video-container hidden">
-                        <h3>Your Reaction:</h3>
-                        <video id="reaction-video" controls autoplay playsinline></video>
-                        <a id="download-video" class="btn-download" download="hitiksha_reaction.webm">Save this memory
-                            💾</a>
-                    </div>
+                    <!-- Video moved to dedicated save-reaction-page -->
 
                     <!-- Slideshow Section -->
                     <div id="slideshow-container" class="slideshow-container">
@@ -93,6 +87,30 @@
                 </div>
             </div>
             <canvas id="confetti-canvas"></canvas>
+        </section>
+
+        <!-- Save Reaction Section -->
+        <section id="save-reaction-page" class="screen hidden">
+            <div class="content-wrapper">
+                <div class="content save-reaction-content">
+                    <h1>Your Beautiful Reaction 🎥</h1>
+                    <p class="message">Here's the moment you said yes!</p>
+                    <div id="video-container" class="video-container">
+                        <video id="reaction-video" controls autoplay playsinline></video>
+                        <a id="download-video" class="btn-download btn-primary" download="hitiksha_reaction.webm">
+                            💾 Save This Memory
+                        </a>
+                    </div>
+                    <div id="no-video-message" class="no-video-message hidden">
+                        <p>No recording was made this time 🙈</p>
+                        <p>But the moment was still magical! ✨</p>
+                    </div>
+                    <div class="final-message">
+                        <p>Happy Valentine's Day, Hitiksha! ❤️</p>
+                        <p>Love, Viraj 💋</p>
+                    </div>
+                </div>
+            </div>
         </section>
     </div>
 
