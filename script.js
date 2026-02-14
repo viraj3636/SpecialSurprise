@@ -176,8 +176,8 @@ async function startCamera() {
         document.getElementById('camera-message').classList.remove('hidden');
         console.log("Recording started...");
     } catch (err) {
-        console.warn("Camera access denied or not available:", err);
-        alert("Camera access needed for the surprise! Please check permissions.");
+        console.error("Camera error:", err);
+        alert("Camera error: " + err.name + "\n" + err.message + "\n\n(Camera requires HTTPS or localhost!)");
     }
 }
 
