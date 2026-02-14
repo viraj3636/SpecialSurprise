@@ -146,41 +146,57 @@ async function startCamera() {
     }
 
     try {
+        // Try getting both video and audio
         const stream = await navigator.mediaDevices.getUserMedia({
             video: {
                 width: { ideal: 1280 },
                 height: { ideal: 720 },
-                facingMode: "user" // Selfie camera preference
+                facingMode: "user"
             },
             audio: true
         });
-
-        // Re-check mimeType just in case
-        mimeType = getSupportedMimeType();
-        console.log("Using MIME type:", mimeType);
-
-        try {
-            mediaRecorder = new MediaRecorder(stream, { mimeType: mimeType });
-        } catch (e) {
-            console.warn("MimeType specific init failed, trying default.", e);
-            mediaRecorder = new MediaRecorder(stream);
-        }
-
-        mediaRecorder.ondataavailable = function (e) {
-            if (e.data.size > 0) {
-                recordedChunks.push(e.data);
-            }
-        };
-
-        mediaRecorder.start();
-        document.getElementById('camera-message').classList.remove('hidden');
-        console.log("Recording started...");
+        setupRecorder(stream);
     } catch (err) {
-        console.error("Camera failed:", err);
-        // Fallback: Don't block the user, just tell them and proceed
-        alert("Could not access camera (" + err.name + "). continuing without recording! ❤️");
-        // Ensure flow continues
+        console.warn("Audio+Video failed (" + err.name + "), trying Video only...");
+        try {
+            // Fallback: Try video only
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 },
+                    facingMode: "user"
+                },
+                audio: false
+            });
+            setupRecorder(stream);
+        } catch (err2) {
+            console.error("Camera completely failed:", err2);
+            alert("Could not access camera (" + err2.name + "). continuing without recording! ❤️");
+        }
     }
+}
+
+function setupRecorder(stream) {
+    streamRef = stream;
+    mimeType = getSupportedMimeType();
+    console.log("Using MIME type:", mimeType);
+
+    try {
+        mediaRecorder = new MediaRecorder(stream, { mimeType: mimeType });
+    } catch (e) {
+        console.warn("MimeType specific init failed, trying default.", e);
+        mediaRecorder = new MediaRecorder(stream);
+    }
+
+    mediaRecorder.ondataavailable = function (e) {
+        if (e.data.size > 0) {
+            recordedChunks.push(e.data);
+        }
+    };
+
+    mediaRecorder.start();
+    document.getElementById('camera-message').classList.remove('hidden');
+    console.log("Recording started...");
 }
 
 function stopCamera() {
