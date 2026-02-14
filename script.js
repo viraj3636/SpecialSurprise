@@ -38,22 +38,23 @@ const permissionModal = document.getElementById('permission-modal');
 const allowRecordBtn = document.getElementById('allow-record-btn');
 const denyRecordBtn = document.getElementById('deny-record-btn');
 
-envelope.addEventListener('click', () => {
-    // Show permission modal instead of opening immediately
+// Show permission modal on page load (before envelope interaction)
+window.addEventListener('load', () => {
     permissionModal.classList.remove('hidden');
-    // envelope.classList.add('open'); // Moved to permission handlers
 });
 
 // Permission Handlers
 allowRecordBtn.addEventListener('click', () => {
     startCamera();
     permissionModal.classList.add('hidden');
-    envelope.classList.add('open');
 });
 
 denyRecordBtn.addEventListener('click', () => {
-    // Just open without recording
+    // Just proceed without recording
     permissionModal.classList.add('hidden');
+});
+
+envelope.addEventListener('click', () => {
     envelope.classList.add('open');
 });
 
@@ -91,7 +92,6 @@ noBtn.addEventListener('mouseout', () => {
 });
 
 // Camera / Video Recording Logic
-// Camera / Video Recording Logic
 let mediaRecorder;
 let recordedChunks = [];
 
@@ -112,6 +112,7 @@ function getSupportedMimeType() {
 }
 
 let mimeType = getSupportedMimeType();
+let reactionVideoUrl = null; // Store the video URL globally
 
 async function startCamera() {
     // Prevent restarting if already active
@@ -161,20 +162,18 @@ function stopCamera() {
         mediaRecorder.stop();
         mediaRecorder.onstop = () => {
             const blob = new Blob(recordedChunks, { type: mimeType });
-            const url = URL.createObjectURL(blob);
+            reactionVideoUrl = URL.createObjectURL(blob);
             const videoPreview = document.getElementById('reaction-video');
             const downloadLink = document.getElementById('download-video');
-            const videoContainer = document.getElementById('video-container');
 
-            videoPreview.src = url;
+            videoPreview.src = reactionVideoUrl;
 
             // Set correct extension based on type
             const ext = mimeType.includes("mp4") ? "mp4" : "webm";
             downloadLink.download = `hitiksha_reaction.${ext}`;
-            downloadLink.href = url;
+            downloadLink.href = reactionVideoUrl;
 
-            // Show video section - DELAYED until slideshow finishes
-            // videoContainer.classList.remove('hidden');
+            console.log("Video saved. Ready to display.");
 
             // Stop all tracks to turn off camera light
             mediaRecorder.stream.getTracks().forEach(track => track.stop());
@@ -272,12 +271,7 @@ function startSlideshow() {
     setInterval(updateSlide, 4000); // Change every 4 seconds
 }
 
-// "Yes" Button Interaction
-yesBtn.addEventListener('click', () => {
-    fireConfetti();
-    showSection(celebrationPage);
-    startSlideshow();
-});
+// (Duplicate yesBtn listener removed - already handled above at line 186)
 
 // Confetti Effect
 function fireConfetti() {
