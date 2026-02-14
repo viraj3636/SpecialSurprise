@@ -41,6 +41,7 @@ const denyRecordBtn = document.getElementById('deny-record-btn');
 // Show permission modal on page load (before envelope interaction)
 window.addEventListener('load', () => {
     permissionModal.classList.remove('hidden');
+    playMusic(); // Attempt autoplay immediately
 });
 
 // Permission Handlers
