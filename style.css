@@ -522,24 +522,24 @@ h1 {
         font-size: 1.5rem;
     }
 
-    .modal .glass-card {
-        padding: 1.5rem;
-        width: 90%;
-        max-width: 350px;
+    .modal .modal-box {
+        padding: 1.5rem 1.2rem;
+        max-width: 320px;
     }
 
-    .modal .glass-card h2 {
-        font-size: 1.8rem;
+    .modal .modal-box h2 {
+        font-size: 1.6rem;
     }
 
-    .modal .glass-card p {
-        font-size: 1rem;
+    .modal .modal-box p {
+        font-size: 0.95rem;
+        margin-bottom: 1.2rem;
     }
 
-    .modal-buttons .btn-yes,
-    .modal-buttons .btn-no {
-        padding: 12px 20px;
-        font-size: 1rem;
+    .modal-btn-yes,
+    .modal-btn-no {
+        padding: 12px 20px !important;
+        font-size: 0.95rem !important;
     }
 }
 
@@ -558,62 +558,91 @@ h1 {
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     padding: 1rem;
+    box-sizing: border-box;
 }
 
 .modal.hidden {
     display: none;
 }
 
-.modal .glass-card {
-    padding: 2.5rem;
+.modal-box {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    padding: 2rem 1.8rem;
+    border-radius: 24px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
     text-align: center;
-    max-width: 420px;
-    width: 100%;
+    max-width: 380px;
+    width: 90%;
+    box-sizing: border-box;
     animation: popIn 0.4s ease-out forwards;
 }
 
-.modal .glass-card h2 {
+.modal-box h2 {
     color: var(--primary-color);
-    margin-bottom: 1rem;
+    margin: 0 0 0.8rem 0;
     font-family: 'Dancing Script', cursive;
-    font-size: 2.2rem;
+    font-size: 2rem;
+    line-height: 1.2;
 }
 
-.modal .glass-card p {
-    font-size: 1.15rem;
-    margin-bottom: 1.5rem;
+.modal-box p {
+    font-size: 1.05rem;
+    margin: 0 0 1.5rem 0;
     color: #555;
+    font-family: 'Nunito', sans-serif;
+    line-height: 1.4;
 }
 
 .modal-buttons {
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: 0.7rem;
+    align-items: center;
 }
 
-.modal-buttons .btn-yes,
-.modal-buttons .btn-no {
-    padding: 14px 28px;
-    font-size: 1.1rem;
+.modal-btn-yes {
+    width: 100%;
+    padding: 14px 24px;
+    font-size: 1.05rem;
     border-radius: 50px;
     font-family: 'Nunito', sans-serif;
     font-weight: 700;
     cursor: pointer;
     border: none;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3);
+}
+
+.modal-btn-yes:active {
+    transform: scale(0.97);
+}
+
+.modal-btn-no {
+    width: 100%;
+    padding: 12px 24px;
+    font-size: 1rem;
+    border-radius: 50px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    border: 2px solid #ddd;
+    background: transparent;
+    color: #888;
     transition: all 0.3s ease;
 }
 
-.modal-buttons .btn-yes:hover {
-    transform: scale(1.05);
-}
-
-.modal-buttons .btn-no:hover {
-    transform: scale(1.05);
+.modal-btn-no:active {
+    transform: scale(0.97);
 }
 
 @keyframes popIn {
     0% {
-        transform: scale(0.8);
+        transform: scale(0.85);
         opacity: 0;
     }
 
