@@ -1,0 +1,524 @@
+:root {
+    --primary-color: #ff4d6d;
+    --secondary-color: #ff8fa3;
+    --bg-color: #fff0f3;
+    --text-color: #590d22;
+    --glass-bg: rgba(255, 255, 255, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.6);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: var(--bg-color);
+    background: linear-gradient(-45deg, #fff0f3, #ffe5ec, #ffc2d1, #ffb3c1);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    color: var(--text-color);
+    overflow: hidden;
+    /* Prevent scrolling for the app-like feel */
+    height: 100vh;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+#app {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Removed justify-content: center to allow top-down flow when scrolling */
+    transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+    opacity: 0;
+    pointer-events: none;
+    padding: 20px;
+    overflow-y: auto;
+    /* Allow scrolling */
+    -webkit-overflow-scrolling: touch;
+}
+
+.screen.active {
+    opacity: 1;
+    pointer-events: all;
+    z-index: 10;
+    display: flex;
+    /* Ensure it's visible */
+}
+
+/* Ensure content is centered if it's small, but scrolls if large */
+.screen::before {
+    content: '';
+    flex: 1;
+    /* Pushes content down if small */
+    min-height: 0;
+}
+
+.screen::after {
+    content: '';
+    flex: 1;
+    /* Pushes content up if small */
+    min-height: 0;
+}
+
+/* But we need the content itself to not be flex:1 unless we want it to stretch. 
+   Actually, a better way for "center if small, scroll if big" is:
+*/
+.screen {
+    /* Reset previous flex strategy */
+    display: none;
+    /* Default to hidden, JS will toggle flex */
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    /* Start from top */
+    overflow-y: auto;
+}
+
+.screen.active .content-wrapper {
+    /* A wrapper to enforce vertical centering if height < 100vh */
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 40px 0;
+}
+
+.screen.hidden {
+    opacity: 0;
+    transform: scale(0.95);
+    pointer-events: none;
+}
+
+/* Message Carousel */
+.message-carousel {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    margin: 20px 0;
+    font-family: 'Dancing Script', cursive;
+    height: 40px;
+    /* Fixed height to prevent jumping */
+}
+
+#carousel-text {
+    transition: opacity 0.5s ease-in-out;
+}
+
+/* Envelope Styling */
+.envelope-container {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    background-color: #f08080;
+    margin-top: 50px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.envelope-container:hover {
+    transform: scale(1.05);
+}
+
+.envelope-pocket {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-bottom: 200px solid #ff4d6d;
+    z-index: 2;
+}
+
+.envelope-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-top: 100px solid #ff758c;
+    transform-origin: top;
+    transition: transform 0.6s 0.2s ease, z-index 0.2s;
+    /* Delayed opening */
+    z-index: 3;
+}
+
+.envelope-container.open .envelope-flap {
+    transform: rotateX(180deg);
+    z-index: 1;
+}
+
+.envelope-letter {
+    position: absolute;
+    width: 90%;
+    height: 80%;
+    background: white;
+    bottom: 0;
+    transition: transform 0.5s 0.6s ease;
+    /* Delayed rise */
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.envelope-container.open .envelope-letter {
+    transform: translateY(-100px);
+    z-index: 4;
+    /* Comes above pocket */
+}
+
+.envelope-seal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    background: gold;
+    border-radius: 50%;
+    z-index: 4;
+    transition: opacity 0.3s;
+}
+
+.envelope-container.open .envelope-seal {
+    opacity: 0;
+}
+
+.letter-text {
+    font-size: 2rem;
+    font-family: 'Dancing Script', cursive;
+    color: var(--text-color);
+}
+
+/* Video Container */
+.video-container {
+    margin: 20px 0;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+}
+
+.video-container video {
+    width: 100%;
+    border-radius: 10px;
+    border: 3px solid white;
+}
+
+.btn-download {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background: var(--text-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.camera-message {
+    font-size: 0.8rem;
+    color: var(--text-color);
+    margin-top: 10px;
+    opacity: 0.7;
+}
+
+.hidden {
+    display: none;
+}
+
+h1 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 4rem;
+    color: var(--primary-color);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.subtitle {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: var(--text-color);
+}
+
+.btn-primary,
+.btn-yes {
+    padding: 15px 40px;
+    font-size: 1.5rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+}
+
+.btn-primary:hover,
+.btn-yes:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(255, 77, 109, 0.6);
+}
+
+/* Landing Page Animations */
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* Background Hearts */
+.background-elements .heart {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: var(--secondary-color);
+    opacity: 0.3;
+    /* Better pure CSS Heart */
+    background: transparent;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.background-elements .heart::before,
+.background-elements .heart::after {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 50px;
+    background: var(--secondary-color);
+    border-radius: 30px 30px 0 0;
+    opacity: 0.6;
+}
+
+.background-elements .heart::before {
+    transform: rotate(-45deg);
+    transform-origin: 0 100%;
+}
+
+.background-elements .heart::after {
+    transform: rotate(45deg);
+    transform-origin: 100% 100%;
+}
+
+/* Floating Animation */
+@keyframes floatUp {
+    0% {
+        transform: translateY(100vh) scale(0.5);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 0.6;
+    }
+
+    80% {
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: translateY(-10vh) scale(1);
+        opacity: 0;
+    }
+}
+
+.background-elements .heart {
+    bottom: -100px;
+    /* Start below screen */
+    animation: floatUp linear infinite;
+}
+
+/* Question Page */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+    text-align: center;
+    max-width: 90%;
+    width: 600px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 2rem;
+    position: relative;
+    /* Needed for absolute positioning of No button */
+    min-height: 80px;
+    /* Space for buttons */
+}
+
+.btn-no {
+    padding: 15px 40px;
+    font-size: 1.5rem;
+    background-color: #e9ecef;
+    color: #495057;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    transition: all 0.2s ease;
+    position: absolute;
+    /* Allows it to move freely */
+    /* Only apply position relative behavior initially via JS or standard flow? 
+       Actually, absolute makes jumping easier. Let's keep it in flow initially, 
+       then switch to absolute if needed, or just use transform/top/left on absolute.
+       Let's stick to absolute behavior within a relative container, or Fixed if we want it to go anywhere.
+       "Fixed" or "Absolute" to body is best for maximum range.
+    */
+    position: relative;
+    z-index: 5;
+}
+
+.cute-gif img {
+    margin-top: 2rem;
+    border-radius: 15px;
+    max-width: 100%;
+    height: auto;
+    max-height: 200px;
+}
+
+/* Slideshow / Polaroid Style */
+.slideshow-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem 0;
+    width: 100%;
+    min-height: 400px;
+}
+
+.polaroid {
+    background: white;
+    padding: 15px 15px 40px 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    transform: rotate(-2deg);
+    transition: transform 0.5s ease;
+    max-width: 90%;
+    width: 350px;
+    text-align: center;
+    border-radius: 2px;
+}
+
+.polaroid:hover {
+    transform: rotate(0deg) scale(1.02);
+}
+
+.polaroid img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    border: 1px solid #eee;
+    background-color: #eee;
+}
+
+.caption {
+    margin-top: 15px;
+}
+
+#slideshow-text {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.8rem;
+    color: var(--text-color);
+    min-height: 1.5em;
+    /* Prevent jump */
+}
+
+/* Confetti */
+#confetti-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 20;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    .subtitle {
+        font-size: 1.5rem;
+    }
+
+    .buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-no {
+        position: relative;
+    }
+
+    /* Reset for mobile initially? UX decision: Jumping button is hard on mobile. */
+    .polaroid {
+        width: 90%;
+    }
+
+    #slideshow-text {
+        font-size: 1.5rem;
+    }
+}

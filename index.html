@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Valentine, Hitiksha</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Nunito:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="app">
+        <!-- Landing Section: Envelope -->
+        <section id="landing-page" class="screen active">
+            <div class="envelope-container" id="envelope">
+                <div class="envelope-flap"></div>
+                <div class="envelope-pocket"></div>
+                <div class="envelope-letter" id="envelope-letter">
+                    <h1 class="letter-text">For Hitiksha...</h1>
+                    <button id="open-letter-btn" class="btn-primary">Open ❤️</button>
+                </div>
+                <div class="envelope-seal"></div>
+            </div>
+
+            <div class="background-elements">
+                <!-- Hearts added by JS -->
+            </div>
+        </section>
+
+        <!-- Question Section -->
+        <section id="question-page" class="screen hidden">
+            <div class="glass-card">
+                <h1>Will you be my Valentine? 🌹</h1>
+                <div class="buttons">
+                    <button id="yes-btn" class="btn-yes">Yes, absolutely! 💖</button>
+                    <button id="no-btn" class="btn-no">No 😢</button>
+                </div>
+                <div class="cute-gif">
+                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2QyZzZ4YjZ4YjZ4YjZ4YjZ4YjZ4YjZ4YjZ4/l0HlCqVze6eFNE7jG/giphy.gif"
+                        alt="Cute Gif" id="question-gif">
+                </div>
+                <!-- Camera access message, initially hidden -->
+                <p id="camera-message" class="camera-message hidden">Recording your beautiful reaction... 🎥</p>
+            </div>
+        </section>
+
+        <!-- Celebration Section -->
+        <section id="celebration-page" class="screen hidden">
+            <div class="content-wrapper">
+                <div class="content">
+                    <h1>Yay! I knew it! ❤️</h1>
+                    <p class="message">You represent the world to me, Hitiksha.</p>
+
+                    <!-- Reaction Video Playback -->
+                    <div id="video-container" class="video-container hidden">
+                        <h3>Your Reaction:</h3>
+                        <video id="reaction-video" controls autoplay></video>
+                        <a id="download-video" class="btn-download" download="hitiksha_reaction.webm">Save this memory
+                            💾</a>
+                    </div>
+
+                    <!-- Slideshow Section -->
+                    <div id="slideshow-container" class="slideshow-container">
+                        <div class="polaroid">
+                            <img id="slideshow-img" src="" alt="Our Memory" />
+                            <div class="caption">
+                                <p id="slideshow-text"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="final-message">
+                        <p>Let's make this day unforgettable.</p>
+                        <p>Love, Viraj 💋</p>
+                    </div>
+                </div>
+            </div>
+            <canvas id="confetti-canvas"></canvas>
+        </section>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="bg-music" loop>
+        <!-- User to add src -->
+        <source src="" type="audio/mp3">
+    </audio>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
