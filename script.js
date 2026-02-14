@@ -121,18 +121,19 @@ let recordedChunks = [];
 
 function getSupportedMimeType() {
     const types = [
-        "video/webm;codecs=vp9",
-        "video/webm;codecs=vp8",
-        "video/webm",
+        "video/mp4;codecs=avc1,mp4a.40.2", // High compatibility for iOS/Photos
+        "video/mp4;codecs=avc1",
         "video/mp4",
-        "video/mpeg"
+        "video/webm;codecs=vp9,opus",
+        "video/webm;codecs=vp8,opus",
+        "video/webm"
     ];
     for (const type of types) {
         if (MediaRecorder.isTypeSupported(type)) {
             return type;
         }
     }
-    return "video/webm"; // Default fallback
+    return "video/mp4"; // Prefer mp4 fallback for mobile
 }
 
 let mimeType = getSupportedMimeType();
@@ -178,6 +179,7 @@ async function startCamera() {
 
 function setupRecorder(stream) {
     streamRef = stream;
+    recordedChunks = []; // CRITICAL: Clear previous attempts
     mimeType = getSupportedMimeType();
     console.log("Using MIME type:", mimeType);
 
