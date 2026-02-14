@@ -521,6 +521,106 @@ h1 {
     #slideshow-text {
         font-size: 1.5rem;
     }
+
+    .modal .glass-card {
+        padding: 1.5rem;
+        width: 90%;
+        max-width: 350px;
+    }
+
+    .modal .glass-card h2 {
+        font-size: 1.8rem;
+    }
+
+    .modal .glass-card p {
+        font-size: 1rem;
+    }
+
+    .modal-buttons .btn-yes,
+    .modal-buttons .btn-no {
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+}
+
+/* Permission Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 1rem;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal .glass-card {
+    padding: 2.5rem;
+    text-align: center;
+    max-width: 420px;
+    width: 100%;
+    animation: popIn 0.4s ease-out forwards;
+}
+
+.modal .glass-card h2 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.2rem;
+}
+
+.modal .glass-card p {
+    font-size: 1.15rem;
+    margin-bottom: 1.5rem;
+    color: #555;
+}
+
+.modal-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.modal-buttons .btn-yes,
+.modal-buttons .btn-no {
+    padding: 14px 28px;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.modal-buttons .btn-yes:hover {
+    transform: scale(1.05);
+}
+
+.modal-buttons .btn-no:hover {
+    transform: scale(1.05);
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 /* Save Reaction Page */
