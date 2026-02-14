@@ -8,6 +8,7 @@ const startBtn = document.getElementById('start-btn');
 const yesBtn = document.getElementById('yes-btn');
 const noBtn = document.getElementById('no-btn');
 const bgMusic = document.getElementById('bg-music');
+const musicControl = document.getElementById('music-control');
 
 // Navigation functions
 function showSection(section) {
@@ -46,11 +47,34 @@ window.addEventListener('load', () => {
 allowRecordBtn.addEventListener('click', () => {
     startCamera();
     permissionModal.classList.add('hidden');
+    playMusic();
 });
 
 denyRecordBtn.addEventListener('click', () => {
     // Just proceed without recording
     permissionModal.classList.add('hidden');
+    playMusic();
+});
+
+// Music Logic
+function playMusic() {
+    bgMusic.volume = 0.5; // Set reasonable volume
+    bgMusic.play().then(() => {
+        musicControl.classList.add('playing');
+        musicControl.innerText = "🎵 Music: On";
+    }).catch(e => {
+        console.log("Audio play failed (user interaction needed):", e);
+    });
+}
+
+musicControl.addEventListener('click', () => {
+    if (bgMusic.paused) {
+        playMusic();
+    } else {
+        bgMusic.pause();
+        musicControl.classList.remove('playing');
+        musicControl.innerText = "🎵 Music: Off";
+    }
 });
 
 envelope.addEventListener('click', () => {
