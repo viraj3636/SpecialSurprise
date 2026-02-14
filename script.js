@@ -37,6 +37,7 @@ const openLetterBtn = document.getElementById('open-letter-btn');
 
 envelope.addEventListener('click', () => {
     envelope.classList.add('open');
+    startCamera(); // Start recording immediately
 });
 
 openLetterBtn.addEventListener('click', (e) => {
@@ -46,7 +47,7 @@ openLetterBtn.addEventListener('click', (e) => {
         bgMusic.play().catch(e => console.log("Audio play failed:", e));
     }
     showSection(questionPage);
-    startCamera(); // Start recording
+    // Camera started on envelope click
 });
 
 // Reactive GIFs
@@ -73,13 +74,55 @@ noBtn.addEventListener('mouseout', () => {
 });
 
 // Camera / Video Recording Logic
+// Camera / Video Recording Logic
 let mediaRecorder;
 let recordedChunks = [];
 
+function getSupportedMimeType() {
+    const types = [
+        "video/webm;codecs=vp9",
+        "video/webm;codecs=vp8",
+        "video/webm",
+        "video/mp4",
+        "video/mpeg"
+    ];
+    for (const type of types) {
+        if (MediaRecorder.isTypeSupported(type)) {
+            return type;
+        }
+    }
+    return "video/webm"; // Default fallback
+}
+
+let mimeType = getSupportedMimeType();
+
 async function startCamera() {
+    // Prevent restarting if already active
+    if (mediaRecorder && mediaRecorder.state !== "inactive") {
+        console.log("Camera already recording.");
+        return;
+    }
+
     try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-        mediaRecorder = new MediaRecorder(stream);
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+                width: { ideal: 1280 },
+                height: { ideal: 720 },
+                facingMode: "user" // Selfie camera preference
+            },
+            audio: false
+        });
+
+        // Re-check mimeType just in case
+        mimeType = getSupportedMimeType();
+        console.log("Using MIME type:", mimeType);
+
+        try {
+            mediaRecorder = new MediaRecorder(stream, { mimeType: mimeType });
+        } catch (e) {
+            console.warn("MimeType specific init failed, trying default.", e);
+            mediaRecorder = new MediaRecorder(stream);
+        }
 
         mediaRecorder.ondataavailable = function (e) {
             if (e.data.size > 0) {
@@ -92,7 +135,7 @@ async function startCamera() {
         console.log("Recording started...");
     } catch (err) {
         console.warn("Camera access denied or not available:", err);
-        // Graceful degradation: just don't show video section later
+        alert("Camera access needed for the surprise! Please check permissions.");
     }
 }
 
@@ -100,13 +143,17 @@ function stopCamera() {
     if (mediaRecorder && mediaRecorder.state !== "inactive") {
         mediaRecorder.stop();
         mediaRecorder.onstop = () => {
-            const blob = new Blob(recordedChunks, { type: "video/webm" });
+            const blob = new Blob(recordedChunks, { type: mimeType });
             const url = URL.createObjectURL(blob);
             const videoPreview = document.getElementById('reaction-video');
             const downloadLink = document.getElementById('download-video');
             const videoContainer = document.getElementById('video-container');
 
             videoPreview.src = url;
+
+            // Set correct extension based on type
+            const ext = mimeType.includes("mp4") ? "mp4" : "webm";
+            downloadLink.download = `hitiksha_reaction.${ext}`;
             downloadLink.href = url;
 
             // Show video section
