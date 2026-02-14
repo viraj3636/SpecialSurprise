@@ -494,53 +494,7 @@ h1 {
 }
 
 /* Responsive */
-@media (max-width: 600px) {
-    h1 {
-        font-size: 2.5rem;
-    }
 
-    .subtitle {
-        font-size: 1.5rem;
-    }
-
-    .buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .btn-no {
-        position: relative;
-    }
-
-    /* Reset for mobile initially? UX decision: Jumping button is hard on mobile. */
-    .polaroid {
-        width: 90%;
-    }
-
-    #slideshow-text {
-        font-size: 1.5rem;
-    }
-
-    .modal .modal-box {
-        padding: 1.5rem 1.2rem;
-        max-width: 320px;
-    }
-
-    .modal .modal-box h2 {
-        font-size: 1.6rem;
-    }
-
-    .modal .modal-box p {
-        font-size: 0.95rem;
-        margin-bottom: 1.2rem;
-    }
-
-    .modal-btn-yes,
-    .modal-btn-no {
-        padding: 12px 20px !important;
-        font-size: 0.95rem !important;
-    }
-}
 
 /* Permission Modal */
 .modal {
@@ -749,4 +703,53 @@ h1 {
 .music-btn.playing {
     background: var(--primary-color);
     color: white;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    .subtitle {
+        font-size: 1.5rem;
+    }
+
+    .buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-no {
+        position: relative;
+    }
+
+    /* Reset for mobile initially? UX decision: Jumping button is hard on mobile. */
+    .polaroid {
+        width: 90%;
+    }
+
+    #slideshow-text {
+        font-size: 1.5rem;
+    }
+
+    .modal .modal-box {
+        padding: 1.5rem 1.2rem;
+        max-width: 320px;
+    }
+
+    .modal .modal-box h2 {
+        font-size: 1.6rem;
+    }
+
+    .modal .modal-box p {
+        font-size: 0.95rem;
+        margin-bottom: 1.2rem;
+    }
+
+    .modal-btn-yes,
+    .modal-btn-no {
+        padding: 12px 20px !important;
+        font-size: 0.95rem !important;
+    }
 }
