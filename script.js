@@ -273,7 +273,7 @@ function startSlideshow() {
         }, 500); // 500ms fade out
     }
 
-    slideshowInterval = setInterval(updateSlide, 5000); // Change every 5 seconds
+    slideshowInterval = setInterval(updateSlide, 3000); // Change every 3 seconds
 }
 
 function showSaveReactionPage() {
