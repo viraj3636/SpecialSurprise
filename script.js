@@ -17,19 +17,17 @@ function showSection(section) {
         el.classList.add('hidden');
 
         // Wait for transition to finish before setting display: none
-        // We match this to the CSS transition time (0.8s)
         setTimeout(() => {
             el.style.display = 'none';
         }, 800);
     });
 
     // Show target section
-    section.style.display = 'flex'; // Make it visible in layout first
-    // Small delay to allow display change to register before playing transition
-    setTimeout(() => {
-        section.classList.remove('hidden');
-        section.classList.add('active');
-    }, 10);
+    section.style.display = 'flex'; // Inline style overrides .hidden display:none
+    // Force a reflow so the display change registers
+    section.offsetHeight;
+    section.classList.remove('hidden');
+    section.classList.add('active');
 }
 
 // Envelope Interaction
@@ -215,7 +213,7 @@ function moveNoButton() {
 
 // Slideshow Logic
 const slides = [
-    { text: "You are my sunshine ☀️", img: "images/1.JPG" },
+    { text: "You are my sunshine ☀️", img: "images/1.jpg" },
     { text: "Every moment with you is magic ✨", img: "images/IMG_9266 2.JPG" },
     { text: "I love your smile 😊", img: "images/IMG_9363 2.jpg" },
     { text: "My heart beats for you 💓", img: "images/IMG_9428 2.jpg" },
@@ -231,6 +229,17 @@ function startSlideshow() {
     let slideshowInterval;
     const imgElement = document.getElementById('slideshow-img');
     const textElement = document.getElementById('slideshow-text');
+
+    // Load first image immediately (no fade-out on first load)
+    imgElement.src = slides[0].img;
+    textElement.innerText = slides[0].text;
+    imgElement.style.opacity = 1;
+    textElement.style.opacity = 1;
+    index = 1; // Start the interval from the second image
+
+    // Set transitions after first image is shown
+    imgElement.style.transition = "opacity 0.5s ease-in-out";
+    textElement.style.transition = "opacity 0.5s ease-in-out";
 
     function updateSlide() {
         // Fade out
@@ -262,11 +271,6 @@ function startSlideshow() {
             index = (index + 1) % slides.length;
         }, 500); // 500ms fade out
     }
-
-    // Initial state setup (before interval)
-    imgElement.style.transition = "opacity 0.5s ease-in-out";
-    textElement.style.transition = "opacity 0.5s ease-in-out";
-    updateSlide(); // Run immediately
 
     slideshowInterval = setInterval(updateSlide, 4000); // Change every 4 seconds
 }
