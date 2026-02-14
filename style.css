@@ -20,9 +20,8 @@ body {
     background-size: 400% 400%;
     animation: gradientBG 15s ease infinite;
     color: var(--text-color);
-    overflow: hidden;
-    /* Prevent scrolling for the app-like feel */
-    height: 100vh;
+    /* overflow: hidden; Removed to allow scrolling */
+    min-height: 100vh;
 }
 
 @keyframes gradientBG {
