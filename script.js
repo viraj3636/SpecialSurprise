@@ -151,7 +151,7 @@ async function startCamera() {
                 height: { ideal: 720 },
                 facingMode: "user" // Selfie camera preference
             },
-            audio: false
+            audio: true
         });
 
         // Re-check mimeType just in case
