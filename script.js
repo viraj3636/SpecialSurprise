@@ -183,7 +183,7 @@ function stopCamera() {
 // "Yes" Button Interaction -> End Recording
 yesBtn.addEventListener('click', () => {
     fireConfetti();
-    stopCamera(); // Stop recording
+    // stopCamera(); // DON'T stop here - keep recording!
     showSection(celebrationPage);
     startSlideshow();
 });
@@ -261,6 +261,7 @@ function startSlideshow() {
                 if (cycles === 1) {
                     // Stop slideshow and show save reaction page
                     clearInterval(slideshowInterval);
+                    stopCamera(); // Stop recording NOW (capture full reaction)
                     setTimeout(() => {
                         showSaveReactionPage();
                     }, 3000); // Wait 3 seconds on last slide before transitioning
